@@ -41,9 +41,8 @@ export const signin = async (req, res, next) => {
 export const google = async (req, res, next) => {
   console.log("backend google api is called");
   try {
-    console.log(req.body.email)
+     
     const user = await User.findOne({ email: req.body.email })
-    console.log(user)
 
     if (user) {
       console.log("user email found");
@@ -55,7 +54,7 @@ export const google = async (req, res, next) => {
          .json(rest);
     }
     else {
-      console.log("user email not found")
+       console.log("user not found")
       const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
