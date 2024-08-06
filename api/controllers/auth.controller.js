@@ -43,15 +43,23 @@ export const google = async (req, res, next) => {
   try {
      
     const user = await User.findOne({ email: req.body.email })
+    console.log(user)
 
     if (user) {
       console.log("user email found");
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      console.log("user id : ",user.username)
+      const token = jwt.sign({ id: user.username }, process.env.JWT_SECRET);
+      console.log("token",token)
       const { password: pass, ...rest } = user_doc;
-       res
-         .cookie("access_token", token, { httpOnly: true })
-         .status(200)
-         .json(rest);
+      try {
+        res
+          .cookie("access_token", token, { httpOnly: true })
+          .status(200)
+          .json(rest);
+      } catch (err) {
+        console.log("response error:",err)
+      }
+      
     }
     else {
        console.log("user not found")
@@ -71,6 +79,7 @@ export const google = async (req, res, next) => {
       next(err);
     });
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      console.log("token:",token)
       const { password: pass, ...rest } = user_doc;
       res
         .cookie("access_token", token, { httpOnly: true })
