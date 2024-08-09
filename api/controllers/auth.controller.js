@@ -20,24 +20,25 @@ export const signup = async (req, res,next) => {
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
   
-  try{const validUser = await User.findOne({ email: email });
-  if (!validUser) {
-    return next(errorHandler(404,'User not found'))
-  }
-  const validPassword = bcryptjs.compareSync(password, validUser.password);
-  if (!validPassword) {
-    return next(errorHandler(401, 'invalid password'));
+  try {
+    const validUser = await User.findOne({ email: email });
+    if (!validUser) {
+      return next(errorHandler(404, 'User not found'))
+    }
+    const validPassword = bcryptjs.compareSync(password, validUser.password);
+    if (!validPassword) {
+      return next(errorHandler(401, 'invalid password'));
     }
     console.log(validUser._id);
     const token = jwt.sign({ userId: validUser._id }, process.env.SECRET_KEY);
-    console.log("token created",token);
+    console.log("token created", token);
     const { password: pass, ...rest } = validUser._doc;
-    res.cookie('access_token', token ,{ httpOnly: true }).status(200).json(rest);
+    res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
 
-  } catch (error){
+  } catch (error) {
     next(error);
   }
-}
+};
 
 
 export const google = async (req, res, next) => {
@@ -99,4 +100,14 @@ export const google = async (req, res, next) => {
     next(error)
   }
   
+};
+
+export const signout = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("user has been logged out successfully");
+    
+  } catch (error) {
+    next(error);
+  }
 };

@@ -14,9 +14,13 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signoutUserFailure,
+  signoutUserStart,
+ signoutUserSuccess,
 } from "../redux/user/userslice";
 
 import { useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -27,6 +31,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
   //   console.log(formData);
   // console.log(filePerc);
   // console.log(fileUploaderror);
@@ -115,6 +120,25 @@ export default function Profile() {
     }
   };
 
+  const handleSignoutUser = async (req, res, next) => {
+    try {
+      dispatch(signoutUserStart());
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signoutUserFailure(data.message));
+        return;
+      }
+      else {
+        dispatch(signoutUserSuccess(data));
+        // navigate('/sign-in')
+
+      }
+    } catch (error) {
+      dispatch(signoutUserFailure(error.message));      
+    }
+  }
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semiblod text-center my-7 ">Profile</h1>
@@ -187,7 +211,7 @@ export default function Profile() {
         >
           Delete account
         </span>
-        <span className="text-red-700 cursor-pointer">Sign out</span>
+        <span onClick={handleSignoutUser} className="text-red-700 cursor-pointer">Sign out</span>
       </div>
       <p className="text-red-700 mt-5"> {error ? error : ""}</p>
       <p className="text-green-700 mt-5">
