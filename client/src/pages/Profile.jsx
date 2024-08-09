@@ -11,13 +11,16 @@ import {
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userslice";
 
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function Profile() {
   const fileRef = useRef(null);
-  const { currentuser,loading,error } = useSelector((state) => state.user);
+  const { currentuser, loading, error } = useSelector((state) => state.user);
   const [file, setFile] = useState(null);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploaderror, setfileUploadError] = useState(false);
@@ -66,7 +69,7 @@ export default function Profile() {
 
   const handleSubmit = async (e) => {
     if (confirm("do you want to update your profile")) {
-      console.log("update button is clicked")
+      console.log("update button is clicked");
       e.preventDefault();
       console.log("currentuser is", currentuser);
       try {
@@ -86,12 +89,29 @@ export default function Profile() {
           return;
         }
         dispatch(updateUserSuccess(data));
-        setUpdateSuccess(true)
-        
-      
+        setUpdateSuccess(true);
       } catch (err) {
         dispatch(updateUserFailure(err.message));
       }
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentuser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      } else {
+        dispatch(deleteUserSuccess(data));
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -152,17 +172,28 @@ export default function Profile() {
           id="password"
           onChange={handleChange}
         ></input>
-        <button disabled={ loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
-          {loading?'loading':'update'}
+        <button
+          disabled={loading}
+          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+        >
+          {loading ? "loading" : "update"}
         </button>
       </form>
 
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete account</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete account
+        </span>
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
-      <p className="text-red-700 mt-5" > { error ? error :""}</p>
-      <p className="text-green-700 mt-5" > { updateSuccess?"user updated successfully":""}</p>
+      <p className="text-red-700 mt-5"> {error ? error : ""}</p>
+      <p className="text-green-700 mt-5">
+        {" "}
+        {updateSuccess ? "user updated successfully" : ""}
+      </p>
     </div>
   );
 }
