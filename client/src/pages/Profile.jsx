@@ -8,6 +8,8 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+
+
 import {
   updateUserFailure,
   updateUserStart,
@@ -24,6 +26,7 @@ import { useDispatch } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+
   const fileRef = useRef(null);
   const { currentuser, loading, error } = useSelector((state) => state.user);
   const [file, setFile] = useState(null);
