@@ -23,7 +23,7 @@ export default function Listing() {
       const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
    const [copied, setCopied] = useState(false);
-  //  const [contact, setContact] = useState(false);
+   const [contact, setContact] = useState(false);
    const { currentuser } = useSelector((state) => state.user);
   useEffect(() => {
     const fetchListing = async () => {
