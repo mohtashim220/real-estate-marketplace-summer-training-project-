@@ -62,7 +62,7 @@ export const getListing = async (req, res, next) => {
       return next(errorHandler(404,'listing not found'));
     }
     res.status(200).json(listing);
-  } catch (erro) {
+  } catch (error) {
     next(error)
   }
 };
