@@ -35,3 +35,22 @@ export const deleteListing = async (req, res, next) => {
   }
 
 };
+
+export const updateListing = async (req, res, next) => {
+  console.log('update listing APi is called');
+  const listing = await Listing.findById(req.params.id);
+  if (!listing) {
+    return next(errorHandler(404, 'listing not found'));
+  }
+  if (req.user.userId !== listing.userRef) {
+    return next(errorHandler(401, 'you can update your listing only'))
+  }
+  try {
+    const updatedListing = await Listing.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    return res.status(200).json(updatedListing);
+
+  }
+  catch (error) {
+    next(error);   
+  }
+};
