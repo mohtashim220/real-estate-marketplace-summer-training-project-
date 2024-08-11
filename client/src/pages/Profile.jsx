@@ -126,7 +126,7 @@ export default function Profile() {
     }
   };
 
-  const handleSignoutUser = async ( ) => {
+  const handleSignoutUser = async () => {
     try {
       dispatch(signoutUserStart());
       const res = await fetch('/api/auth/signout');
@@ -141,7 +141,7 @@ export default function Profile() {
 
       }
     } catch (error) {
-      dispatch(signoutUserFailure(error.message));      
+      dispatch(signoutUserFailure(error.message));
     }
   }
 
@@ -161,7 +161,27 @@ export default function Profile() {
       setShowLisitngError(true);
       
     }
+  };
+
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+        
+      });
+       const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setUserListings((prev) => prev.filter((listing)=> listing._id !== listingId));
+    
+
+  } catch (error) {
+    console.log(error.message)
+      
   }
+}
 
   return (
     <div className="p-3 max-w-lg mx-auto">
