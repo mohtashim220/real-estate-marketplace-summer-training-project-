@@ -1,11 +1,12 @@
 import { FaSearch } from 'react-icons/fa'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import style from './Header.module.css'
 
 export default function Header() {
   const { currentuser } = useSelector(state => state.user);
   return (
-    <header className="bg-slate-200 shadow-md">
+    <header className={`shadow-md ${style.header}`} >
       <div className="flex justify-between item-center max-w-6xl mx-auto p-3">
         <Link to="/">
           <h1 className="font-bold text-sm sm:text-xl flex-wrap">

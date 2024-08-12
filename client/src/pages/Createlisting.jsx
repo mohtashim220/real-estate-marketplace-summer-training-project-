@@ -1,4 +1,5 @@
 import React from "react";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
