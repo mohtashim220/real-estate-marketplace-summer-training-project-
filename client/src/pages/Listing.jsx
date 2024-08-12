@@ -5,6 +5,7 @@ import SwiperCore from 'swiper';
 import { Navigation } from 'swiper/modules';
 import { useSelector } from "react-redux";
 import 'swiper/css/bundle';
+import { FaIndianRupeeSign } from "react-icons/fa6";
 import {
   FaBath,
   FaBed,
@@ -104,9 +105,12 @@ export default function Listing() {
                 {listing.type === "rent" ? "For Rent" : "For Sale"}
               </p>
               {listing.offer && (
-                <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${+listing.regularPrice - +listing.discountPrice} OFF
-                </p>
+                
+                  <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+                  <FaIndianRupeeSign className="inline" />
+              <p className='inline'>{+listing.regularPrice - +listing.discountPrice} OFF</p>
+              </p>
+                
               )}
             </div>
             <p className="text-slate-800">
